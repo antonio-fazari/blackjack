@@ -16,10 +16,15 @@
 		 * @param initialScore
 		 * @constructor
 		 */
-		function Player(playerName, initialScore) {
+		function Player(playerName, initialScore, seatNo) {
 			this.score = initialScore;
 			this.initialScore = initialScore;
 			this.name = playerName;
+			this.handValue = 0;
+			this.seatNo = seatNo;
+			this.cards = [];
+			this.busted = false;
+			this.won = false;
 		}
 
 		/**
@@ -47,8 +52,8 @@
 		 * @param initialScore
 		 * @returns {PlayerService.Player}
 		 */
-		function newPlayer(playerName, initialScore) {
-			var player = new Player(playerName, initialScore);
+		function newPlayer(playerName, initialScore, seatNo) {
+			var player = new Player(playerName, initialScore, seatNo);
 			return player;
 		}
 

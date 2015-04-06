@@ -49,14 +49,22 @@
             </div>
 
             <div class="row">
-                <div ng-if="game.started">
-                    <p>Player Hand: {{game.handValue}}</p>
-                </div>
-                <div ng-if="!game.started">
-                    <p>Player</p>
-                </div>
-                <div class="well well-lg">
-                    <div class="card row" ng-repeat="card in game.playerCards">{{card.name()}}</div>
+                <div ng-repeat="player in game.players">
+                    <div ng-if="game.started">
+                        <p>Player {{player.seatNo}} Hand: {{player.handValue}}</p>
+                    </div>
+                    <div ng-if="!game.started">
+                        <p>Player</p>
+                    </div>
+                    <div ng-if="player.busted">
+                        <p>Player BUSTED!</p>
+                    </div>
+                    <div ng-if="player.won">
+                        <p>Player WON!</p>
+                    </div>
+                    <div class="well well-lg">
+                        <div class="card row" ng-repeat="card in player.cards">{{card.name()}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +72,9 @@
 
     <!-- Game Actions -->
     <div class="panel panel-default">
+        <div class="row" ng-if="!game.started">
+            <button class="btn btn-primary" ng-click="game.start()">Start</button>
+        </div>
         <div class="row" ng-if="game.started">
             <div class="col-md-6 col-md-offset-3">
                 <div class="btn-group btn-group-justified">
@@ -71,16 +82,13 @@
                         <button class="btn btn-primary" ng-click="game.deal()" ng-disabled="!game.canDeal">Deal</button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-warning" ng-click="game.hit()" ng-disabled="!game.canHit">HIT</button>
+                        <button class="btn btn-warning" ng-click="game.hit(game.activePlayer)" ng-disabled="!game.canHit">HIT</button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-danger" ng-click="game.end()" ng-disabled="!game.canHit">STAY</button>
+                        <button class="btn btn-danger" ng-click="game.stay()" ng-disabled="!game.canHit">STAY</button>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row" ng-if="!game.started">
-            <button class="btn btn-primary" ng-click="game.start()">Start</button>
         </div>
     </div>
 

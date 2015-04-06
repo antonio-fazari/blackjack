@@ -6,7 +6,7 @@
     .factory('CardService', CardService);
 
 
-  function CardService()  {
+  function CardService() {
     var service = {
       newDeck: newDeck,
       Deck: Deck,
@@ -37,13 +37,14 @@
 
     Deck.prototype.ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 
-    Deck.prototype.deal = function(){
+    Deck.prototype.deal = function() {
       var card = this.cards.shift();
-      if(angular.isDefined(card)){
+
+      if (angular.isDefined(card)) {
         this.dealt.push(card);
         return card;
       }
-      else{
+      else {
         return false;
       }
     };
@@ -69,18 +70,18 @@
       }
     };
 
-    Deck.prototype.reset = function () {
+    Deck.prototype.reset = function() {
       this.cards = this.cards.concat(this.dealt);
       this.dealt = [];
       this.shuffle();
     };
 
-    function Card(rank, suit){
+    function Card(rank, suit) {
       this.rank = rank;
       this.suit = suit;
     }
 
-    Card.prototype.name = function () {
+    Card.prototype.name = function() {
       return this.rank + ' ' + this.suit;
     };
 

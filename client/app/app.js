@@ -6,10 +6,7 @@ angular.module('blackjackApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
-  'blackjack.game',
-  'blackjack.card',
-  'blackjack.player',
-  'blackjack.dealer',
+  'blackjack.game'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider

@@ -22,7 +22,6 @@
      * Initialize our controller data
      */
     game.init = function() {
-      console.log('Yay');
       game.maxValue = GameService.maxValue();
       game.canDeal = false;
       game.started = false;
@@ -30,20 +29,34 @@
       game.deck = CardService.newDeck();
       game.dealer = DealerService.newDealer(game.deck);
       game.betValue = 100;
-      game.playerCards = [];
       game.handValue = 0;
+      game.noPlayers = 2;
+      game.activePlayer = 0;
     };
 
     /**
      * Starts a game by creating a new player
      */
     game.start = function() {
-      console.log('Yayaa');
-      game.player = PlayerService.newPlayer('Ringo', 100);
+      game.players = [];
+      for (var i = 0; i < game.noPlayers; i++) {
+        game.players.push(PlayerService.newPlayer('Ringo ' + i, 100, i));
+      }
+
       game.started = true;
       game.canDeal = true;
       game.showResults = false;
     };
+
+    game.resetPlayers = function() {
+      // Remove all cards from each player.
+      game.players.forEach(function(player) {
+        game.players[player.seatNo].cards = [];
+        game.players[player.seatNo].handValue = 0;
+        game.players[player.seatNo].busted = false;
+        game.players[player.seatNo].won = false;
+      });
+    }
 
     /**
      * Deals a new hand by 'paying' from the score,
@@ -56,31 +69,48 @@
       game.started = true;
       game.canDeal = false;
       game.showResults = false;
+      game.activePlayer = 0;
 
-      //Our bet defaults to 100
-      game.player.changeScore(game.betValue * -1);
+      game.resetPlayers();
 
-      //Shuffle before dealing
+      // Shuffle before dealing.
       game.deck.shuffle();
 
-      //Empty our dealt card array
-      game.playerCards = [];
+      // Our bet defaults to 100.
+      game.players.forEach(function(player) {
+        // Deduct points from each player.
+        game.players[player.seatNo].changeScore(game.betValue * -1);
 
-      //Deal the cards
-      game.hit();
-      game.hit();
+        // Deal the cards.
+        game.hit(player.seatNo);
+        game.hit(player.seatNo);
+      });
 
-      //Deal to the dealer
+      // Deal to the dealer.
       game.dealer.deal();
     };
 
     /**
      * Adds a card to our hand and calculates value.
      */
-    game.hit = function() {
-      game.playerCards.push(game.deck.deal());
-      game.getHandValue();
+    game.hit = function(seatNo) {
+      // Hand out cards to each player.
+      game.players[seatNo].cards.push(game.deck.deal());
+      game.getHandValue(seatNo);
     };
+
+    game.stay = function() {
+      game.activePlayer++;
+
+      if (game.activePlayer === game.noPlayers) {
+        game.end();
+      } else {
+        // TODO: Set the next active player.
+        game.canHit = true;
+        game.busted = false;
+        game.getHandValue(game.activePlayer);
+      }
+    }
 
     /**
      * Ends the game for the current hand. Checks for wins
@@ -89,40 +119,40 @@
     game.end = function() {
       // Tell the dealer to finish his hand
       game.dealer.finish();
+      // TODO: rewrite to handle evaluating multiple players hands.
+      game.players.forEach(function(player) {
 
-      if (game.busted) {
-        game.results = "BUSTED";
-      }
-      else {
         var wonGame = false;
         var tiedGame = false;
+        var seatNo = player.seatNo;
+
         // Check against dealer's hand
-        if(game.dealer.busted){
+        if (game.dealer.busted) {
           // Auto Win if dealer busts
           wonGame = true;
         }
-        else{
-          if (game.dealer.handValue === game.handValue) {
+        else {
+          if (game.dealer.handValue === player.handValue) {
             tiedGame = true;
           }
           else {
-            wonGame = (game.handValue > game.dealer.handValue);
+            wonGame = (player.handValue > game.dealer.handValue);
           }
         }
 
         if (wonGame) {
           // Winning pays double the bet
-          game.player.changeScore(game.betValue * 2);
-          game.results = "YOU WON!";
+          game.players[seatNo].changeScore(game.betValue * 2);
+          game.players[seatNo].won = true;
         }
         else if (tiedGame) {
-          //A 'PUSH' gives the player back their bet
-          game.player.changeScore(game.betValue);
+          // A 'PUSH' gives the player back their bet
+          game.players[seatNo].changeScore(game.betValue);
         }
         else {
           game.results = "DEALER WON";
         }
-      }
+      });
 
       game.canHit = false;
       game.canDeal = true;
@@ -133,7 +163,7 @@
      * Resets our player's score and re-inits
      */
     game.reset = function() {
-      game.player = null;
+      game.players = [];
       game.init();
     };
 
@@ -141,12 +171,21 @@
      * Calculates value of player's hand via GameService
      * Determines if player can still hit or if busted.
      */
-    game.getHandValue = function() {
-      game.handValue = GameService.handValue(game.playerCards);
-      game.canHit = game.handValue < game.maxValue;
-      game.busted = game.handValue > game.maxValue;
-      if (game.handValue >= game.maxValue) {
-        game.end();
+    game.getHandValue = function(seatNo) {
+      // var seatNo = game.activePlayer;
+      var handValue = GameService.handValue(game.players[seatNo].cards);
+      game.players[seatNo].handValue = handValue;
+
+      game.canHit = handValue < game.maxValue;
+      game.busted = handValue > game.maxValue;
+
+      if (game.busted) {
+        game.players[seatNo].busted = true;
+        game.players[seatNo].won = false;
+      }
+
+      if (handValue >= game.maxValue) {
+        game.stay();
       }
     };
 

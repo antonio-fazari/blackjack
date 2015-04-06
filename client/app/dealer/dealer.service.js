@@ -52,7 +52,7 @@
           dealer.hit();
         }
         if (dealer.handValue > dealer.maxValue) {
-            dealer.busted = true;
+          dealer.busted = true;
         }
         dealer.isDone = true;
       };
@@ -61,15 +61,15 @@
        * Deals a card to the dealer's hand
        */
       dealer.hit = function() {
-          dealer.cards.push(dealer.deck.deal());
-          dealer.getHandValue();
+        dealer.cards.push(dealer.deck.deal());
+        dealer.getHandValue();
       };
 
       /**
        * Uses game service to calculate hand value
        */
       dealer.getHandValue = function() {
-          dealer.handValue = GameService.handValue(dealer.cards);
+        dealer.handValue = GameService.handValue(dealer.cards);
       };
 
       dealer.init();
