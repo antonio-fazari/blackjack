@@ -11,14 +11,6 @@
     var game = this;
 
     /**
-     * Our game can have multiple states:
-     * 1) Game with no player (started = false, canDeal = false, showResults = false)
-     * 2) Game with a player, nothing dealt (started = true, canDeal = true, showResults = false)
-     * 3) Game with a player, game in progress (started = true, canDeal = false, showResults = false)
-     * 4) Game with a player, game over (started = true, canDeal = true, showResults = true)
-     */
-
-    /**
      * Initialize our controller data
      */
     game.init = function() {
@@ -50,7 +42,7 @@
       game.showResults = false;
     };
 
-    game.resetPlayers = function() {
+    game.resetPlayersState = function() {
       // Remove all cards from each player.
       game.players.forEach(function(player) {
         game.players[player.seatNo].cards = [];
@@ -73,7 +65,8 @@
       game.showResults = false;
       game.activePlayer = 0;
 
-      game.resetPlayers();
+      // Reset each players state.
+      game.resetPlayersState();
 
       // Shuffle before dealing.
       game.deck.shuffle();
