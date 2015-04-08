@@ -1,0 +1,32 @@
+.game {
+  margin-top: 20px;
+
+  .row {
+    margin: 20px auto;
+  }
+
+  .row--inline {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 0 5px;
+  }
+
+  .btn-group--actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .btn {
+      border-radius: 0;
+    }
+  }
+
+  .btn--reset {
+    margin-top: 20px;
+  }
+
+  .player-info {
+    display: block;
+  }
+}

@@ -25,6 +25,7 @@
 			this.cards = [];
 			this.busted = false;
 			this.won = false;
+			this.results = '';
 		}
 
 		/**

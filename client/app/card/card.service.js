@@ -82,7 +82,7 @@
     }
 
     Card.prototype.name = function() {
-      return this.rank + ' ' + this.suit;
+      return this.rank + this.suit;
     };
 
     return service;

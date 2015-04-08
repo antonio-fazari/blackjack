@@ -38,9 +38,11 @@
      * Starts a game by creating a new player
      */
     game.start = function() {
+      var tempPlayerNames = ['Ray Charles', 'Frank Sinatra', 'James Brown'];
       game.players = [];
+
       for (var i = 0; i < game.noPlayers; i++) {
-        game.players.push(PlayerService.newPlayer('Ringo ' + i, 100, i));
+        game.players.push(PlayerService.newPlayer(tempPlayerNames[i], 100, i));
       }
 
       game.started = true;
@@ -105,7 +107,6 @@
       if (game.activePlayer === game.noPlayers) {
         game.end();
       } else {
-        // TODO: Set the next active player.
         game.canHit = true;
         game.busted = false;
         game.getHandValue(game.activePlayer);
@@ -140,17 +141,20 @@
           }
         }
 
-        if (wonGame) {
+        if (wonGame && !player.busted) {
           // Winning pays double the bet
           game.players[seatNo].changeScore(game.betValue * 2);
           game.players[seatNo].won = true;
+          game.players[seatNo].results = "Congratulations, You Won!";
         }
         else if (tiedGame) {
           // A 'PUSH' gives the player back their bet
           game.players[seatNo].changeScore(game.betValue);
+          game.players[seatNo].results = "Push with the dealer!";
         }
         else {
           game.results = "DEALER WON";
+          game.players[seatNo].results = "Dealer beat you!";
         }
       });
 

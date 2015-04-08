@@ -5,7 +5,7 @@
     .module('blackjack.game')
     .directive('blackjackGame', blackjackGame);
 
-  function blackjackGame(){
+  function blackjackGame() {
     return {
       restrict: 'E',
       templateUrl: 'app/game/game.directive.html',

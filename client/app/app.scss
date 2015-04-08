@@ -15,8 +15,26 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
+h2 {
+  margin-bottom: 20px;
+}
+
+.align--center {
+  text-align: center;
+}
+
+.panel {
+  margin: 0 20px;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 // Component styles are injected through grunt
 // injector
+@import 'card/card.scss';
+@import 'game/game.scss';
 @import 'main/main.scss';
 @import 'modal/modal.scss';
 // endinjector
