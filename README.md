@@ -12,11 +12,13 @@ the project using a generator from Yeoman, the generator I used was called
 
 Run the following commands:
 
-npm install - Install all required node packages
-bower install - Install all required bower packages
+- npm install - Install all required node packages
+- bower install - Install all required bower packages
+- grunt serve - Serve the project locally
 
-grunt serve - Serve the project locally
-grunt test - Run all jasmine tests
+Run tests using the following command:
+
+- grunt test - Run all jasmine tests
 
 ### TODOs
 
