@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="row row--players">
-                    <div ng-repeat="player in game.players">
+                    <div ng-repeat="player in game.players" ng-class="{active: player.active}" class="player">
                         <div ng-if="game.started">
                             <p>
                                 <span class="player-info">Player: {{player.name}}</span>

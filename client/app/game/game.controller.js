@@ -83,6 +83,8 @@
 
       // Deal to the dealer.
       game.dealer.deal();
+      game.players[game.activePlayer].active = true;
+      console.log(game.players);
     };
 
     /**
@@ -95,6 +97,7 @@
     };
 
     game.stay = function() {
+      game.players[game.activePlayer].active = false;
       game.activePlayer++;
 
       if (game.activePlayer === game.noPlayers) {
@@ -102,6 +105,7 @@
       } else {
         game.canHit = true;
         game.busted = false;
+        game.players[game.activePlayer].active = true;
         game.getHandValue(game.activePlayer);
       }
     }

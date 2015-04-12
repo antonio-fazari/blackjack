@@ -26,6 +26,7 @@
 			this.busted = false;
 			this.won = false;
 			this.results = '';
+			this.active = false;
 		}
 
 		/**
